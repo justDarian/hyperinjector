@@ -1,2 +1,2 @@
-meow: true,
-test: aa,
+game: 15610085219
+version: "1"
