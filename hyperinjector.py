@@ -1,3 +1,689 @@
-import base64, lzma, requests, pymem, re, os, ctypes
+## .gg/haxx
 
-exec(compile(lzma.decompress(base64.b64decode(b'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')), "<string>", "exec"))
+import requests
+import pymem
+import re
+import os
+import ctypes
+
+version = "1"
+data = {}
+data_file = requests.get("https://raw.githubusercontent.com/justDarian/hyperinjector/main/data.txt").text.split('\n')
+# takes the datafile and extracts the key and values
+for line in data_file:
+ if ':' in line:
+  key, value = line.split(':', 1)
+  data[key.strip()] = value.strip()
+
+## creds meow
+print(r'''github.com/justDarian/hyperinjector     
+  _                           _       _           _             
+ | |                         (_)     (_)         | |            
+ | |__  _   _ _ __   ___ _ __ _ _ __  _  ___  ___| |_ ___  _ __ 
+ | '_ \| | | | '_ \ / _ \ '__| | '_ \| |/ _ \/ __| __/ _ \| '__|
+ | | | | |_| | |_) |  __/ |  | | | | | |  __/ (__| || (_) | |   
+ |_| |_|\__, | .__/ \___|_|  |_|_| |_| |\___|\___|\__\___/|_|   
+         __/ | |                    _/ |                        
+        |___/|_|                   |__/                             
+
+''')
+print(data["message"])
+print(r'''
+credits:
+justDarian/not.darian (modifying it for production)
+01 (basically everything)
+bloxlib (github.com/ElCapor/bloxlib)
+----------------------------------------------------
+''')
+
+## bloxlib
+class hyper:
+    def __init__(self, ProgramName=None):
+        self.ProgramName = ProgramName
+        self.Pymem = pymem.Pymem()
+        self.Addresses = {}
+        self.Handle = None
+        self.is64bit = False
+        self.ProcessID = None
+        self.PID = self.ProcessID
+        if type(ProgramName) == str:
+            self.Pymem = pymem.Pymem(ProgramName)
+            self.Handle = self.Pymem.process_handle
+            self.is64bit = not pymem.process.is_64_bit(self.Handle)
+            self.ProcessID = self.Pymem.process_id
+            self.PID = self.ProcessID
+        elif type(ProgramName) == int:
+            self.Pymem.open_process_from_id(ProgramName)
+            self.Handle = self.Pymem.process_handle
+            self.is64bit = not pymem.process.is_64_bit(self.Handle)
+            self.ProcessID = self.Pymem.process_id
+            self.PID = self.ProcessID
+
+    def h2d(self, hz: str, bit: int = 16) -> int:
+        if type(hz) == int:
+            return hz
+        return int(hz, bit)
+
+    def d2h(self, dc: int, UseAuto=None) -> str:
+        if type(dc) == str:
+            return dc
+        if UseAuto:
+            if UseAuto == 32:
+                dc = hex(dc & (2**32 - 1)).replace("0x", "")
+            else:
+                dc = hex(dc & (2**64 - 1)).replace("0x", "")
+        else:
+            if abs(dc) > 4294967295:
+                dc = hex(dc & (2**64 - 1)).replace("0x", "")
+            else:
+                dc = hex(dc & (2**32 - 1)).replace("0x", "")
+        if len(dc) > 8:
+            while len(dc) < 16:
+                dc = "0" + dc
+        if len(dc) < 8:
+            while len(dc) < 8:
+                dc = "0" + dc
+        return dc
+
+    def PLAT(self, aob: str):
+        if type(aob) == bytes:
+            return aob
+        trueB = bytearray(b"")
+        aob = aob.replace(" ", "")
+        PLATlist = []
+        for i in range(0, len(aob), 2):
+            PLATlist.append(aob[i : i + 2])
+        for i in PLATlist:
+            if "?" in i:
+                trueB.extend(b".")
+            if "?" not in i:
+                trueB.extend(re.escape(bytes.fromhex(i)))
+        return bytes(trueB)
+
+    def AOBSCANALL(self, AOB_HexArray, xreturn_multiple=False):
+        return pymem.pattern.pattern_scan_all(
+            self.Pymem.process_handle,
+            self.PLAT(AOB_HexArray),
+            return_multiple=xreturn_multiple,
+        )
+
+    def gethexc(self, hex: str):
+        hex = hex.replace(" ", "")
+        hxlist = []
+        for i in range(0, len(hex), 2):
+            hxlist.append(hex[i : i + 2])
+        return len(hxlist)
+
+    def hex2le(self, hex: str):
+        lehex = hex.replace(" ", "")
+        lelist = []
+        if len(lehex) > 8:
+            while len(lehex) < 16:
+                lehex = "0" + lehex
+            for i in range(0, len(lehex), 2):
+                lelist.append(lehex[i : i + 2])
+            lelist.reverse()
+            return "".join(lelist)
+        if len(lehex) < 9:
+            while len(lehex) < 8:
+                lehex = "0" + lehex
+            for i in range(0, len(lehex), 2):
+                lelist.append(lehex[i : i + 2])
+            lelist.reverse()
+            return "".join(lelist)
+
+    def calcjmpop(self, des, cur):
+        jmpopc = (self.h2d(des) - self.h2d(cur)) - 5
+        jmpopc = hex(jmpopc & (2**32 - 1)).replace("0x", "")
+        if len(jmpopc) % 2 != 0:
+            jmpopc = "0" + str(jmpopc)
+        return jmpopc
+
+    def isProgramGameActive(self):
+        try:
+            self.Pymem.read_char(self.Pymem.base_address)
+            return True
+        except:
+            return False
+
+    def DRP(self, Address: int, is64Bit: bool = None) -> int:
+        Address = Address
+        if type(Address) == str:
+            Address = self.h2d(Address)
+        if is64Bit:
+            return int.from_bytes(self.Pymem.read_bytes(Address, 8), "little")
+        if self.is64bit:
+            return int.from_bytes(self.Pymem.read_bytes(Address, 8), "little")
+        return int.from_bytes(self.Pymem.read_bytes(Address, 4), "little")
+
+    def isValidPointer(self, Address: int, is64Bit: bool = None) -> bool:
+        try:
+            if type(Address) == str:
+                Address = self.h2d(Address)
+            self.Pymem.read_bytes(self.DRP(Address, is64Bit), 1)
+            return True
+        except:
+            return False
+
+    def GetModules(self) -> list:
+        return list(self.Pymem.list_modules())
+
+    def getAddressFromName(self, Address: str) -> int:
+        if type(Address) == int:
+            return Address
+        AddressBase = 0
+        AddressOffset = 0
+        for i in self.GetModules():
+            if i.name in Address:
+                AddressBase = i.lpBaseOfDll
+                AddressOffset = self.h2d(Address.replace(i.name + "+", ""))
+                AddressNamed = AddressBase + AddressOffset
+                return AddressNamed
+        print("Unable to find Address: " + Address)
+        return Address
+
+    def getNameFromAddress(self, Address: int) -> str:
+        memoryInfo = pymem.memory.virtual_query(self.Pymem.process_handle, Address)
+        BaseAddress = memoryInfo.BaseAddress
+        NameOfDLL = ""
+        AddressOffset = 0
+        for i in self.GetModules():
+            if i.lpBaseOfDll == BaseAddress:
+                NameOfDLL = i.name
+                AddressOffset = Address - BaseAddress
+                break
+        if NameOfDLL == "":
+            return Address
+        NameOfAddress = NameOfDLL + "+" + self.d2h(AddressOffset)
+        return NameOfAddress
+
+    def getRawProcesses(self):
+        toreturn = []
+        for i in pymem.process.list_processes():
+            toreturn.append(
+                [
+                    i.cntThreads,
+                    i.cntUsage,
+                    i.dwFlags,
+                    i.dwSize,
+                    i.pcPriClassBase,
+                    i.szExeFile,
+                    i.th32DefaultHeapID,
+                    i.th32ModuleID,
+                    i.th32ParentProcessID,
+                    i.th32ProcessID,
+                ]
+            )
+        return toreturn
+
+    def SimpleGetProcesses(self):
+        toreturn = []
+        for i in self.getRawProcesses():
+            toreturn.append({"Name": i[5].decode(), "Threads": i[0], "ProcessId": i[9]})
+        return toreturn
+
+    def YieldForProgram(self, programName):
+        ProcessesList = self.SimpleGetProcesses()
+        for i in ProcessesList:
+            if i["Name"] == programName:
+                self.Pymem.open_process_from_id(i["ProcessId"])
+                self.ProgramName = programName
+                self.Handle = self.Pymem.process_handle
+                self.is64bit = not pymem.process.is_64_bit(self.Handle)
+                self.ProcessID = self.Pymem.process_id
+                self.PID = self.ProcessID
+                return True
+        return False
+
+
+    def ReadPointer(
+        self, BaseAddress: int, Offsets_L2R: list, is64Bit: bool = None
+    ) -> int:
+        x = self.DRP(BaseAddress, is64Bit)
+        y = Offsets_L2R
+        z = x
+        if y == None or len(y) == 0:
+            return z
+        count = 0
+        for i in y:
+            try:
+                print(self.d2h(x + i))
+                print(self.d2h(i))
+                z = self.DRP(z + i, is64Bit)
+                count += 1
+                print(self.d2h(z))
+            except:
+                print("Failed to read Offset at Index: " + str(count))
+                return z
+        return z
+
+    def GetMemoryInfo(self, Address: int, Handle: int = None):
+        if Handle:
+            return pymem.memory.virtual_query(Handle, Address)
+        else:
+            return pymem.memory.virtual_query(self.Handle, Address)
+
+    def MemoryInfoToDictionary(self, MemoryInfo):
+        return {
+            "BaseAddress": MemoryInfo.BaseAddress,
+            "AllocationBase": MemoryInfo.AllocationBase,
+            "AllocationProtect": MemoryInfo.AllocationProtect,
+            "RegionSize": MemoryInfo.RegionSize,
+            "State": MemoryInfo.State,
+            "Protect": MemoryInfo.Protect,
+            "Type": MemoryInfo.Type,
+        }
+
+    def SetProtection(
+        self,
+        Address: int,
+        ProtectionType=0x40,
+        Size: int = 4,
+        OldProtect=ctypes.c_ulong(0),
+    ):
+        pymem.ressources.kernel32.VirtualProtectEx(
+            self.Pymem.process_handle,
+            Address,
+            Size,
+            ProtectionType,
+            ctypes.byref(OldProtect),
+        )
+        return OldProtect
+
+    def ChangeProtection(
+        self,
+        Address: int,
+        ProtectionType=0x40,
+        Size: int = 4,
+        OldProtect=ctypes.c_ulong(0),
+    ):
+        return self.SetProtection(Address, ProtectionType, Size, OldProtect)
+
+    def GetProtection(self, Address: int):
+        return self.GetMemoryInfo(Address).Protect
+
+    def KnowProtection(self, Protection):
+        if Protection == 0x10:
+            return "PAGE_EXECUTE"
+        if Protection == 0x20:
+            return "PAGE_EXECUTE_READ"
+        if Protection == 0x40:
+            return "PAGE_EXECUTE_READWRITE"
+        if Protection == 0x80:
+            return "PAGE_EXECUTE_WRITECOPY"
+        if Protection == 0x01:
+            return "PAGE_NOACCESS"
+        if Protection == 0x02:
+            return "PAGE_READONLY"
+        if Protection == 0x04:
+            return "PAGE_READWRITE"
+        if Protection == 0x08:
+            return "PAGE_WRITECOPY"
+        if Protection == 0x100:
+            return "PAGE_GUARD"
+        if Protection == 0x200:
+            return "PAGE_NOCACHE"
+        if Protection == 0x400:
+            return "PAGE_WRITECOMBINE"
+        if Protection in ["PAGE_EXECUTE", "execute", "e"]:
+            return 0x10
+        if Protection in [
+            "PAGE_EXECUTE_READ",
+            "execute read",
+            "read execute",
+            "execute_read",
+            "read_execute",
+            "er",
+            "re",
+        ]:
+            return 0x20
+        if Protection in [
+            "PAGE_EXECUTE_READWRITE",
+            "execute read write",
+            "execute write read",
+            "write execute read",
+            "write read execute",
+            "read write execute",
+            "read execute write",
+            "erw",
+            "ewr",
+            "wre",
+            "wer",
+            "rew",
+            "rwe",
+        ]:
+            return 0x40
+        if Protection in [
+            "PAGE_EXECUTE_WRITECOPY",
+            "execute copy write",
+            "execute write copy",
+            "write execute copy",
+            "write copy execute",
+            "copy write execute",
+            "copy execute write",
+            "ecw",
+            "ewc",
+            "wce",
+            "wec",
+            "cew",
+            "cwe",
+        ]:
+            return 0x80
+        if Protection in ["PAGE_NOACCESS", "noaccess", "na", "n"]:
+            return 0x01
+        if Protection in ["PAGE_READONLY", "readonly", "ro", "r"]:
+            return 0x02
+        if Protection in ["PAGE_READWRITE", "read write", "write read", "wr", "rw"]:
+            return 0x04
+        if Protection in ["PAGE_WRITECOPY", "write copy", "copy write", "wc", "cw"]:
+            return 0x08
+        if Protection in ["PAGE_GUARD", "pg", "guard", "g"]:
+            return 0x100
+        if Protection in ["PAGE_NOCACHE", "nc", "nocache"]:
+            return 0x200
+        if Protection in ["PAGE_WRITECOMBINE", "write combine", "combine write"]:
+            return 0x400
+        return Protection
+
+    def Suspend(self, pid: int = None):
+        kernel32 = ctypes.WinDLL("kernel32.dll")
+        if pid:
+            kernel32.DebugActiveProcess(pid)
+        if self.PID:
+            kernel32.DebugActiveProcess(self.PID)
+
+    def Resume(self, pid: int = None):
+        kernel32 = ctypes.WinDLL("kernel32.dll")
+        if pid:
+            kernel32.DebugActiveProcessStop(pid)
+        if self.PID:
+            kernel32.DebugActiveProcessStop(self.PID)
+## now a variable!!?!?!?
+hyper = hyper()
+
+def ReadRobloxString(ExpectedAddress: int) -> str:
+    StringCount = hyper.Pymem.read_int(ExpectedAddress + 0x10)
+    if StringCount > 15:
+        return hyper.Pymem.read_string(hyper.DRP(ExpectedAddress), StringCount)
+    return hyper.Pymem.read_string(ExpectedAddress, StringCount)
+
+def GetClassName(Instance: int) -> str:
+    ExpectedAddress = hyper.DRP(hyper.DRP(Instance + 0x18) + 8)
+    return ReadRobloxString(ExpectedAddress)
+
+def setParent(Instance, Parent):
+    hyper.Pymem.write_longlong(Instance + parentOffset, Parent)
+    newChildren = hyper.Pymem.allocate(0x400)
+    hyper.Pymem.write_longlong(newChildren + 0, newChildren + 0x40)
+    ptr = hyper.Pymem.read_longlong(Parent + childrenOffset)
+    childrenStart = hyper.Pymem.read_longlong(ptr)
+    childrenEnd = hyper.Pymem.read_longlong(ptr + 8)
+    b = hyper.Pymem.read_bytes(childrenStart, childrenStart - childrenEnd)
+    hyper.Pymem.write_bytes(newChildren + 0x40, b, len(b))
+    e = newChildren + 0x40 + (childrenEnd - childrenStart)
+    hyper.Pymem.write_longlong(e, Instance)
+    hyper.Pymem.write_longlong(e + 8, hyper.Pymem.read_longlong(Instance + 0x10))
+    e = e + 0x10
+    hyper.Pymem.write_longlong(newChildren + 0x8, e)
+    hyper.Pymem.write_longlong(newChildren + 0x10, e)
+
+# start injector
+def inject():
+    players = 0
+    nameOffset = 0
+    valid = False
+    results = hyper.AOBSCANALL(
+        "506C6179657273??????????????????07000000000000000F", True
+    )
+    if not results:
+        input("FAILED BADLY! PLEASE REPORT THIS TO DISCORD")
+        exit()
+    for rn in results:
+        result = rn
+        if not result:
+            input("Failed!")
+            exit()
+        bres = hyper.d2h(result)
+        aobs = ""
+        for i in range(1, 16 + 1):
+            aobs = aobs + bres[i - 1 : i]
+        aobs = hyper.hex2le(aobs)
+        first = False
+        hyper.Suspend() # freeze
+        res = hyper.AOBSCANALL(aobs, True)
+        if res:
+            valid = False
+            for i in res:
+                try:
+                    result = i
+                    for j in range(1, 10 + 1):
+                        address = result - (8 * j)
+                        if not hyper.isValidPointer(address):
+                            continue
+                        ptr = hyper.Pymem.read_longlong(address)
+                        if hyper.isValidPointer(ptr):
+                            address = ptr + 8
+                            if not hyper.isValidPointer(address):
+                                continue
+                            ptr = hyper.Pymem.read_longlong(address)
+                            if (
+                                hyper.Pymem.read_string(ptr) == "Players"
+                            ): 
+                                if not first:
+                                    first = True
+                                    players = (result - (8 * j)) - 0x18
+                                    nameOffset = result - players
+                                else:
+                                    players = (result - (8 * j)) - 0x18
+                                    nameOffset = result - players
+                                    break
+                    if valid:
+                        break
+                except:
+                    pass
+            if valid:
+                break
+    hyper.Resume() # unfreeze
+    if players == 0:
+        print("Failed to get Players service!")
+        return None
+    parentOffset = 0
+    for i in range(0x10, 0x120 + 8, 8):
+        address = players + i
+        if not hyper.isValidPointer(address):
+            continue
+        ptr = hyper.Pymem.read_longlong(address)
+        if ptr != 0 and ptr % 4 == 0:
+            address = ptr + 8
+            if not hyper.isValidPointer(address):
+                continue
+            if hyper.Pymem.read_longlong(address) == ptr:
+                parentOffset = i
+                break
+    if parentOffset == 0:
+        print("Failed to get Parent Offset!")
+        return None
+    dataModel = hyper.Pymem.read_longlong(players + parentOffset)
+    childrenOffset = 0
+    for i in range(0x10, 0x200 + 8, 8):
+        ptr = hyper.Pymem.read_longlong(dataModel + i)
+        if ptr:
+            try:
+                childrenStart = hyper.Pymem.read_longlong(ptr)
+                childrenEnd = hyper.Pymem.read_longlong(ptr + 8)
+                if childrenStart and childrenEnd:
+                    if (
+                        childrenEnd > childrenStart
+                        and childrenEnd - childrenStart > 1
+                        and childrenEnd - childrenStart < 0x1000
+                    ):
+                        childrenOffset = i
+                        break
+            except:
+                pass
+    print("Injection: Found children (not humans lmao - darian)")
+
+    def GetNameAddress(Instance):
+        ExpectedAddress = hyper.DRP(Instance + nameOffset, True)
+        return ExpectedAddress
+
+    def GetName(Instance: int) -> str:
+        ExpectedAddress = GetNameAddress(Instance)
+        return ReadRobloxString(ExpectedAddress)
+
+    def GetChildren(Instance: int) -> str:
+        ChildrenInstance = []
+        InstanceAddress = Instance
+        if not InstanceAddress:
+            return False
+        ChildrenStart = hyper.DRP(InstanceAddress + childrenOffset, True)
+        if ChildrenStart == 0:
+            return []
+        ChildrenEnd = hyper.DRP(ChildrenStart + 8, True)
+        OffsetAddressPerChild = 0x10
+        CurrentChildAddress = hyper.DRP(ChildrenStart, True)
+        for i in range(0, 9000):
+            if i == 8999:
+                print("WARNING: Too many children, could be invalid")
+            if CurrentChildAddress == ChildrenEnd:
+                break
+            ChildrenInstance.append(hyper.Pymem.read_longlong(CurrentChildAddress))
+            CurrentChildAddress += OffsetAddressPerChild
+        return ChildrenInstance
+
+    def GetParent(Instance: int) -> int:
+        return hyper.DRP(Instance + parentOffset, True)
+
+    def FindFirstChild(Instance: int, ChildName: str) -> int:
+        ChildrenOfInstance = GetChildren(Instance)
+        for i in ChildrenOfInstance:
+            if GetName(i) == ChildName:
+                return i
+
+    def FindFirstChildOfClass(Instance: int, ClassName: str) -> int:
+        ChildrenOfInstance = GetChildren(Instance)
+        for i in ChildrenOfInstance:
+            if GetClassName(i) == ClassName:
+                return i
+
+    class toInstance:
+        def __init__(self, address: int = 0):
+            self.Address = address
+            self.Self = address
+            self.Name = GetName(address)
+            self.ClassName = GetClassName(address)
+            self.Parent = GetParent(address)
+
+        def getChildren(self):
+            return GetChildren(self.Address)
+
+        def findFirstChild(self, ChildName):
+            return FindFirstChild(self.Address, ChildName)
+
+        def findFirstClass(self, ChildClass):
+            return FindFirstChildOfClass(self.Address, ChildClass)
+
+        def setParent(self, Parent):
+            SetParent(self.Address, Parent)
+
+        def GetChildren(self):
+            return GetChildren(self.Address)
+
+        def FindFirstChild(self, ChildName):
+            return FindFirstChild(self.Address, ChildName)
+
+        def FindFirstClass(self, ChildClass):
+            return FindFirstChildOfClass(self.Address, ChildClass)
+
+        def SetParent(self, Parent):
+            SetParent(self.Address, Parent)
+
+    players = toInstance(players)
+    game = toInstance(dataModel) ## game injection
+    
+    localPlayerOffset = 0
+    for i in range(0x10, 0x600 + 4, 4):
+        ptr = hyper.Pymem.read_longlong(players.Self + i)
+        if not hyper.isValidPointer(ptr):
+            continue
+        if hyper.Pymem.read_longlong(ptr + parentOffset) == players.Self:
+            localPlayerOffset = i
+            break
+    localPlayer = toInstance(hyper.DRP(players.Self + localPlayerOffset))
+    print("Injection: Found localplayer: "+localPlayer.Name)
+    localBackpack = toInstance(localPlayer.FindFirstClass("Backpack"))
+    tools = localBackpack.GetChildren()
+    if len(tools) == 0:
+        input("\n\nERROR: NO TOOLS FOUND")
+        exit()
+    tool = toInstance(tools[0])
+    print("Injection: Injecting in:", tool.Name)
+    targetScript = toInstance(tool.findFirstClass("LocalScript"))
+    print("Injection: Found tool script")
+    injectScript = None
+    results = hyper.AOBSCANALL("496E6A656374????????????????????06", True)
+    if results == []:
+        input("ERROR: No script localscript found in tool")
+        exit()
+    for rn in results:
+        result = rn
+        bres = hyper.d2h(result)
+        aobs = ""
+        for i in range(1, 16 + 1):
+            aobs = aobs + bres[i - 1 : i]
+        aobs = hyper.hex2le(aobs)
+        first = False
+        res = hyper.AOBSCANALL(aobs, True)
+        if res:
+            valid = False
+            for i in res:
+                result = i
+                if (
+                    hyper.Pymem.read_longlong(result - nameOffset + 8)
+                    == result - nameOffset
+                ):
+                    injectScript = result - nameOffset
+                    valid = True
+                    break
+        if valid:
+            break
+    injectScript = toInstance(injectScript)
+    b = hyper.Pymem.read_bytes(injectScript.Self + 0x100, 0x150)
+    hyper.Pymem.write_bytes(targetScript.Self + 0x100, b, len(b))
+    print("Successfully injected\nPlease equip the tool multiple times until the UI shows.")
+    return True
+# end injector  
+
+## start mainscript
+
+os.system("title hyperinjector l V1")
+
+if data["version"] == version: #checks version
+    print("Running Latest Version Of hyperinjector")
+else:
+    os.system("start https://github.com/justDarian/hyperinjector") # if you dont understand this line ur retarded
+    input("Update Found! Opening the GitHub..")
+    exit()
+
+
+print("Refreshing NT Userdata")
+os.system("cleanmgr.exe /sagerun:65535")
+print("Starting ROBLOX (make sure your logged in, or else you will get an error)")
+os.system('start roblox://placeId='+data["game"]) # opens roblox to the set gameID
+
+# waits for roblox and defines it
+while True:
+    if hyper.YieldForProgram("RobloxPlayerBeta.exe"):
+        break
+    if hyper.YieldForProgram("Windows10Universal.exe"):
+        break
+
+input("Using the Teleporter, teleport to a game, then press enter\n(Make Sure Theres A Tool In Your Inventory Before Pressing Enter)")
+print("Injecting... If roblox freezes during this state, do not panic. Just wait")
+
+# injection handler
+try:
+    inject()
+except Exception as uwu:
+    print("Error: "+uwu)
+    input()
