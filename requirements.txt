@@ -1,5 +1,4 @@
 requests
 pymem
-re
 os
 ctypes
