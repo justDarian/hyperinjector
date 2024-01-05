@@ -2,3 +2,4 @@ requests
 pymem
 os
 ctypes
+re
