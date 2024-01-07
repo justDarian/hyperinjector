@@ -1,9 +1,11 @@
 # hyperinjector
 A ROBLOX Byfron Bypass using Memory Modifications
 
+# discord (pls join for future updates and toolless)
+https://discord.gg/wU5SGWXnnH
+
 # how to run (explanation for idiots)
 install python and run start.bat
-so hard (like me)
 
 # credits
 bloxlib - exploit lib
