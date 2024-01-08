@@ -12,7 +12,6 @@ if %errorlevel% neq 0 (
 title Checking libraries...
 pip install requests
 pip install pymem
-pip install re
 pip install ctypes
 cls
 title Starting hyperinjector...
