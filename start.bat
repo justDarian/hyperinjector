@@ -10,7 +10,7 @@ if %errorlevel% neq 0 (
 )
 
 title Checking libraries...
-python -m pip install -r requirements.txt
+pip install -r requirements.txt
 cls
 title Starting hyperinjector...
 python hyperinjector.py
