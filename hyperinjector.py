@@ -6,7 +6,7 @@ import re
 import os
 import ctypes
 
-version = "1"
+version = "2"
 data = {}
 data_file = requests.get("https://raw.githubusercontent.com/justDarian/hyperinjector/main/data.txt").text.split('\n')
 # takes the datafile and extracts the key and values
@@ -449,7 +449,6 @@ def inject():
             aobs = aobs + bres[i - 1 : i]
         aobs = hyper.hex2le(aobs)
         first = False
-        hyper.Suspend() # freeze
         res = hyper.AOBSCANALL(aobs, True)
         if res:
             valid = False
@@ -483,10 +482,6 @@ def inject():
                     pass
             if valid:
                 break
-    hyper.Resume() # unfreeze
-    if players == 0:
-        print("Failed to get Players service!")
-        return None
     parentOffset = 0
     for i in range(0x10, 0x120 + 8, 8):
         address = players + i
