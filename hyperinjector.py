@@ -651,7 +651,7 @@ def inject():
 
 ## start mainscript
 
-os.system("title hyperinjector l V1")
+os.system("title hyperinjector")
 
 if data["version"] == version: #checks version
     print("Running Latest Version Of hyperinjector")
