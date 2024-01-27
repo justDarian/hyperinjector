@@ -1,3 +1,3 @@
-message: discord.gg/haxx
+message: discord.gg/nullify
 game: 15401559973
 version: 2
