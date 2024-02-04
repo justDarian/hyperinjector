@@ -1,3 +1,3 @@
-message: discord.gg/nullify
+message: created by urs truly (darian)
 game: 15401559973
-version: 2
+version: 3
