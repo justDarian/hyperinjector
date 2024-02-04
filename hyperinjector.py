@@ -1,22 +1,17 @@
-## .gg/haxx
+import requests, pymem, re, os, ctypes
 
-import requests
-import pymem
-import re
-import os
-import ctypes
-
-version = "2"
+version = "3"
 data = {}
-data_file = requests.get("https://raw.githubusercontent.com/justDarian/hyperinjector/main/data.txt").text.split('\n')
-# takes the datafile and extracts the key and values
+data_file = requests.get(
+    "https://raw.githubusercontent.com/justDarian/hyperinjector/main/data.txt"
+).text.split("\n")
 for line in data_file:
- if ':' in line:
-  key, value = line.split(':', 1)
-  data[key.strip()] = value.strip()
+    if ":" in line:
+        key, value = line.split(":", 1)
+        data[key.strip()] = value.strip()
 
-## creds meow
-print(r'''github.com/justDarian/hyperinjector     
+print(
+    r"""github.com/justDarian/hyperinjector     
   _                           _       _           _             
  | |                         (_)     (_)         | |            
  | |__  _   _ _ __   ___ _ __ _ _ __  _  ___  ___| |_ ___  _ __ 
@@ -26,17 +21,21 @@ print(r'''github.com/justDarian/hyperinjector
          __/ | |                    _/ |                        
         |___/|_|                   |__/                             
 
-''')
+"""
+)
 print(data["message"])
-print(r'''
+print(
+    r"""
 credits:
-justDarian/not.darian (modifying it for production)
-01 (basically everything)
+justDarian/not.darian -modifying it for production
+northstar - toolless method
+ttwizz/ttwiz_z - adding toolless
+01 - basically everything
 bloxlib (github.com/ElCapor/bloxlib)
 ----------------------------------------------------
-''')
+"""
+)
 
-## bloxlib
 class hyper:
     def __init__(self, ProgramName=None):
         self.ProgramName = ProgramName
@@ -235,7 +234,6 @@ class hyper:
                 return True
         return False
 
-
     def ReadPointer(
         self, BaseAddress: int, Offsets_L2R: list, is64Bit: bool = None
     ) -> int:
@@ -398,8 +396,11 @@ class hyper:
             kernel32.DebugActiveProcessStop(pid)
         if self.PID:
             kernel32.DebugActiveProcessStop(self.PID)
-## now a variable!!?!?!?
+
 hyper = hyper()
+
+parentOffset = 0
+childrenOffset = 0
 
 def ReadRobloxString(ExpectedAddress: int) -> str:
     StringCount = hyper.Pymem.read_int(ExpectedAddress + 0x10)
@@ -411,7 +412,7 @@ def GetClassName(Instance: int) -> str:
     ExpectedAddress = hyper.DRP(hyper.DRP(Instance + 0x18) + 8)
     return ReadRobloxString(ExpectedAddress)
 
-def setParent(Instance, Parent):
+def SetParent(Instance, Parent):
     hyper.Pymem.write_longlong(Instance + parentOffset, Parent)
     newChildren = hyper.Pymem.allocate(0x400)
     hyper.Pymem.write_longlong(newChildren + 0, newChildren + 0x40)
@@ -427,8 +428,8 @@ def setParent(Instance, Parent):
     hyper.Pymem.write_longlong(newChildren + 0x8, e)
     hyper.Pymem.write_longlong(newChildren + 0x10, e)
 
-# start injector
 def inject():
+    global parentOffset, childrenOffset
     players = 0
     nameOffset = 0
     valid = False
@@ -436,7 +437,7 @@ def inject():
         "506C6179657273??????????????????07000000000000000F", True
     )
     if not results:
-        input("FAILED BADLY! PLEASE REPORT THIS TO DISCORD")
+        input("FATAL ERROR")
         exit()
     for rn in results:
         result = rn
@@ -465,9 +466,7 @@ def inject():
                             if not hyper.isValidPointer(address):
                                 continue
                             ptr = hyper.Pymem.read_longlong(address)
-                            if (
-                                hyper.Pymem.read_string(ptr) == "Players"
-                            ): 
+                            if hyper.Pymem.read_string(ptr) == "Players":
                                 if not first:
                                     first = True
                                     players = (result - (8 * j)) - 0x18
@@ -482,7 +481,6 @@ def inject():
                     pass
             if valid:
                 break
-    parentOffset = 0
     for i in range(0x10, 0x120 + 8, 8):
         address = players + i
         if not hyper.isValidPointer(address):
@@ -499,7 +497,6 @@ def inject():
         print("Failed to get Parent Offset!")
         return None
     dataModel = hyper.Pymem.read_longlong(players + parentOffset)
-    childrenOffset = 0
     for i in range(0x10, 0x200 + 8, 8):
         ptr = hyper.Pymem.read_longlong(dataModel + i)
         if ptr:
@@ -516,7 +513,7 @@ def inject():
                         break
             except:
                 pass
-    print("Injection: Found children (not humans lmao - darian)")
+    print("Injection: Found children")
 
     def GetNameAddress(Instance):
         ExpectedAddress = hyper.DRP(Instance + nameOffset, True)
@@ -545,6 +542,13 @@ def inject():
             ChildrenInstance.append(hyper.Pymem.read_longlong(CurrentChildAddress))
             CurrentChildAddress += OffsetAddressPerChild
         return ChildrenInstance
+    
+    def GetDescendants(Instance: int) -> str:
+        DescendantsInstance = []
+        for Child in GetChildren(Instance):
+            DescendantsInstance.append(Child)
+            DescendantsInstance += GetDescendants(Child)
+        return DescendantsInstance
 
     def GetParent(Instance: int) -> int:
         return hyper.DRP(Instance + parentOffset, True)
@@ -571,11 +575,14 @@ def inject():
 
         def getChildren(self):
             return GetChildren(self.Address)
+        
+        def getDescendants(self):
+            return GetDescendants(self.Address)
 
         def findFirstChild(self, ChildName):
             return FindFirstChild(self.Address, ChildName)
 
-        def findFirstClass(self, ChildClass):
+        def findFirstChildOfClass(self, ChildClass):
             return FindFirstChildOfClass(self.Address, ChildClass)
 
         def setParent(self, Parent):
@@ -583,19 +590,22 @@ def inject():
 
         def GetChildren(self):
             return GetChildren(self.Address)
+        
+        def GetDescendants(self):
+            return GetDescendants(self.Address)
 
         def FindFirstChild(self, ChildName):
             return FindFirstChild(self.Address, ChildName)
 
-        def FindFirstClass(self, ChildClass):
+        def FindFirstChildOfClass(self, ChildClass):
             return FindFirstChildOfClass(self.Address, ChildClass)
 
         def SetParent(self, Parent):
             SetParent(self.Address, Parent)
 
     players = toInstance(players)
-    game = toInstance(dataModel) ## game injection
-    
+    game = toInstance(dataModel)
+
     localPlayerOffset = 0
     for i in range(0x10, 0x600 + 4, 4):
         ptr = hyper.Pymem.read_longlong(players.Self + i)
@@ -605,20 +615,26 @@ def inject():
             localPlayerOffset = i
             break
     localPlayer = toInstance(hyper.DRP(players.Self + localPlayerOffset))
-    print("Injection: Found localplayer: "+localPlayer.Name)
-    localBackpack = toInstance(localPlayer.FindFirstClass("Backpack"))
-    tools = localBackpack.GetChildren()
-    if len(tools) == 0:
-        input("\n\nERROR: NO TOOLS FOUND")
-        exit()
-    tool = toInstance(tools[0])
-    print("Injection: Injecting in:", tool.Name)
-    targetScript = toInstance(tool.findFirstClass("LocalScript"))
-    print("Injection: Found tool script")
+    print("Injection: Found LocalPlayer: " + localPlayer.Name)
+    workspace = toInstance(game.FindFirstChildOfClass("Workspace"))
+    if workspace.FindFirstChild(localPlayer.Name):
+        character = toInstance(workspace.FindFirstChild(localPlayer.Name))
+        if character.FindFirstChild("Animate"):
+            targetScript = toInstance(character.FindFirstChild("Animate"))
+            if targetScript.ClassName != "LocalScript":
+                input("\n\nERROR: No Animate LocalScript found")
+                exit()
+        else:
+            input("\n\nERROR: No Animate LocalScript found")
+            exit()
+    else:
+            input("\n\nERROR: No Character found")
+            exit()
+    print("Injection: Injecting in Animate")
     injectScript = None
     results = hyper.AOBSCANALL("496E6A656374????????????????????06", True)
     if results == []:
-        input("ERROR: No script localscript found in tool")
+        input("ERROR: Failed to inject into LocalScript")
         exit()
     for rn in results:
         result = rn
@@ -645,40 +661,31 @@ def inject():
     injectScript = toInstance(injectScript)
     b = hyper.Pymem.read_bytes(injectScript.Self + 0x100, 0x150)
     hyper.Pymem.write_bytes(targetScript.Self + 0x100, b, len(b))
-    print("Successfully injected\nPlease equip the tool multiple times until the UI shows.")
+    print("Successfully injected\nPlease reset your character")
     return True
-# end injector  
-
-## start mainscript
 
 os.system("title hyperinjector")
 
-if data["version"] == version: #checks version
+if data["version"] == version:
     print("Running Latest Version Of hyperinjector")
 else:
-    os.system("start https://github.com/justDarian/hyperinjector") # if you dont understand this line ur retarded
+    os.system("start https://github.com/justDarian/hyperinjector")
     input("Update Found! Opening the GitHub..")
     exit()
-
 
 print("Refreshing NT Userdata")
 os.system("cleanmgr.exe /sagerun:65535")
 print("Starting ROBLOX (make sure your logged in, or else you will get an error)")
-os.system('start roblox://placeId='+data["game"]) # opens roblox to the set gameID
+os.system("start roblox://placeId=" + data["game"])
 
-# waits for roblox and defines it
 while True:
-    if hyper.YieldForProgram("RobloxPlayerBeta.exe"):
-        break
-    if hyper.YieldForProgram("Windows10Universal.exe"):
+    if hyper.YieldForProgram("RobloxPlayerBeta.exe") or hyper.YieldForProgram("Windows10Universal.exe"):
         break
 
-input("Using the Teleporter, teleport to a game, then press enter\n(Make Sure Theres A Tool In Your Inventory Before Pressing Enter)")
+input("Using the Teleporter, teleport to a game, then press enter")
 print("Injecting... If roblox freezes during this state, do not panic. Just wait")
 
-# injection handler
 try:
     inject()
-except Exception as uwu:
-    print("Error: "+uwu)
-    input()
+except Exception as error:
+    input("Error: " + error)
