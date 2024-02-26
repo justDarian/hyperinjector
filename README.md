@@ -1,3 +1,5 @@
+# this doesnt work anyemore, if you couldnt tell
+
 # hyperinjector
 A ROBLOX Byfron Bypass using Memory Modifications
 
