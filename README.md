@@ -1,4 +1,4 @@
-# this doesnt work anyemore, if you couldnt tell
+# patched since like a couple months ago lmao
 
 # hyperinjector
 A ROBLOX Byfron Bypass using Memory Modifications
